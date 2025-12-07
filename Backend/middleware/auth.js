@@ -46,7 +46,7 @@ export const authenticate = asyncHandler(async (req, res, next) => {
   }
 });
 
-// Check if user is authenticated (optional authentication)
+
 export const optionalAuth = asyncHandler(async (req, res, next) => {
   let token;
 
@@ -66,14 +66,14 @@ export const optionalAuth = asyncHandler(async (req, res, next) => {
         req.user = result.rows[0];
       }
     } catch (error) {
-      // Continue without user if token is invalid
+     
     }
   }
 
   next();
 });
 
-// Authorize specific roles
+
 export const authorize = (...roles) => {
   return (req, res, next) => {
     if (!req.user) {
@@ -88,28 +88,28 @@ export const authorize = (...roles) => {
   };
 };
 
-// Check if user owns resource or is admin
+
 export const authorizeOwnerOrAdmin = (userIdField = 'user_id') => {
   return asyncHandler(async (req, res, next) => {
     if (!req.user) {
       return next(new AppError('Access denied. Authentication required.', 401));
     }
 
-    // Admin can access everything
+   
     if (req.user.role === 'admin') {
       return next();
     }
 
-    // Get resource ID from params or body
+   
     const resourceId = req.params.id || req.body.id;
     const userId = req.user.id;
 
-    // For direct user operations (like profile updates)
+   
     if (userIdField === 'id' && resourceId && parseInt(resourceId) === userId) {
       return next();
     }
 
-    // For resources that belong to users (enrollments, submissions, etc.)
+    
     if (req.body[userIdField] && parseInt(req.body[userIdField]) === userId) {
       return next();
     }
@@ -118,23 +118,23 @@ export const authorizeOwnerOrAdmin = (userIdField = 'user_id') => {
   });
 };
 
-// Check if user is instructor of the course
+
 export const authorizeInstructor = asyncHandler(async (req, res, next) => {
   if (!req.user) {
     return next(new AppError('Access denied. Authentication required.', 401));
   }
 
-  // Admin can access everything
+
   if (req.user.role === 'admin') {
     return next();
   }
 
-  // Must be instructor
+ 
   if (req.user.role !== 'instructor') {
     return next(new AppError('Access denied. Instructor role required.', 403));
   }
 
-  // Check if instructor owns the course
+  
   const courseId = req.params.courseId || req.params.id || req.body.course_id;
   
   if (courseId) {
@@ -155,13 +155,13 @@ export const authorizeInstructor = asyncHandler(async (req, res, next) => {
   next();
 });
 
-// Check if user is enrolled in course
+
 export const authorizeEnrolledStudent = asyncHandler(async (req, res, next) => {
   if (!req.user) {
     return next(new AppError('Access denied. Authentication required.', 401));
   }
 
-  // Admin and instructors can access
+
   if (req.user.role === 'admin' || req.user.role === 'instructor') {
     return next();
   }
@@ -186,7 +186,7 @@ export const authorizeEnrolledStudent = asyncHandler(async (req, res, next) => {
   next();
 });
 
-// Check if user is enrolled in course containing the lesson
+
 export const authorizeEnrolledStudentForLesson = asyncHandler(async (req, res, next) => {
   if (!req.user) {
     return next(new AppError('Access denied. Authentication required.', 401));
@@ -205,7 +205,7 @@ export const authorizeEnrolledStudentForLesson = asyncHandler(async (req, res, n
   }
 
   try {
-    // Check if student is enrolled in the course containing this lesson
+    
     const result = await query(
       `SELECT e.id, c.title as course_title
        FROM enrollments e
@@ -220,7 +220,7 @@ export const authorizeEnrolledStudentForLesson = asyncHandler(async (req, res, n
       return next(new AppError('Access denied. You must be enrolled in this course to access quizzes.', 403));
     }
 
-    // Add course info to request for later use
+ 
     req.courseEnrollment = result.rows[0];
     next();
   } catch (error) {
@@ -236,7 +236,7 @@ export const generateToken = (payload) => {
   });
 };
 
-// Extract user ID from token (without full authentication)
+
 export const extractUserId = (req) => {
   try {
     let token;

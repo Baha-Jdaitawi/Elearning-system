@@ -27,7 +27,7 @@ export const getModuleById = async (id, includeLessons = false) => {
   try {
     await client.query('BEGIN');
 
-    // Get module basic info
+ 
     const moduleResult = await client.query(
       `SELECT m.*, c.title as course_title, c.instructor_id
        FROM modules m
@@ -43,7 +43,7 @@ export const getModuleById = async (id, includeLessons = false) => {
     const module = moduleResult.rows[0];
 
     if (includeLessons) {
-      // Get lessons for this module
+     
       const lessonsResult = await client.query(
         `SELECT l.id, l.title, l.content, l.video_url, l.video_duration, l.position, l.is_published,
                 COUNT(DISTINCT q.id) as quiz_count,
@@ -63,7 +63,7 @@ export const getModuleById = async (id, includeLessons = false) => {
         assignment_count: parseInt(lesson.assignment_count)
       }));
 
-      // Calculate module statistics
+    
       module.total_lessons = module.lessons.length;
       module.published_lessons = module.lessons.filter(l => l.is_published).length;
       module.total_duration = module.lessons.reduce((sum, lesson) => 
@@ -82,7 +82,7 @@ export const getModuleById = async (id, includeLessons = false) => {
   }
 };
 
-// Get all modules for a course
+
 export const getModulesByCourse = async (courseId, options = {}) => {
   const { includeUnpublished = false, includeLessons = false } = options;
 
@@ -153,7 +153,7 @@ export const updateModule = async (id, updates) => {
   const values = [];
   let paramCount = 1;
 
-  // Build dynamic update query
+  
   Object.keys(updates).forEach(key => {
     if (updates[key] !== undefined) {
       fields.push(`${key} = $${paramCount}`);
@@ -340,7 +340,7 @@ export const duplicateModule = async (moduleId, targetCourseId) => {
 
     const newModuleId = newModuleResult.rows[0].id;
 
-    // Copy lessons (basic copy without content)
+   
     const lessonsResult = await client.query(
       'SELECT title, content, position FROM lessons WHERE module_id = $1 ORDER BY position',
       [moduleId]

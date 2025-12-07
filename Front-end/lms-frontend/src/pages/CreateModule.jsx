@@ -50,11 +50,11 @@ const CreateModule = () => {
         setCourse(response.data);
       }
       
-      // Fetch existing modules to set correct position
+     
       const modulesResponse = await apiGet(`/modules/course/${courseId}`);
       if (modulesResponse.success) {
         const modules = modulesResponse.data.modules || [];
-        // Set position to be after the last module
+       
         const nextPosition = modules.length + 1;
         setFormData(prev => ({ ...prev, position: nextPosition }));
       }
@@ -94,7 +94,7 @@ const CreateModule = () => {
       
       if (response.success) {
         setSuccess(true);
-        // Redirect after a short delay
+   
         setTimeout(() => {
           navigate(`/instructor/courses/${courseId}/manage`);
         }, 1500);
@@ -129,7 +129,7 @@ const CreateModule = () => {
       const response = await apiPost(`/modules`, moduleData);
       
       if (response.success) {
-        // Redirect to create lesson for this module
+       
         navigate(`/courses/${courseId}/modules/${response.data.id}/lessons/create`);
       } else {
         setError(response.message || 'Failed to create module');

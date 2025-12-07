@@ -22,7 +22,7 @@ import {
 
 import { getCourseById } from '../models/courseModel.js';
 
-// 🆕 Import progress tracking models
+
 import { 
   markLessonComplete,
   getLessonProgress,
@@ -36,7 +36,7 @@ import { successResponse, errorResponse } from '../utils/helpers.js';
 import { AppError, asyncHandler } from '../middleware/errorHandler.js';
 import { HTTP_STATUS, MESSAGES, USER_ROLES } from '../utils/constants.js';
 
-// ✅ Create new lesson
+
 export const createLessonController = asyncHandler(async (req, res) => {
   const {
     module_id,
@@ -83,7 +83,7 @@ export const createLessonController = asyncHandler(async (req, res) => {
   ));
 });
 
-// ✅ Get lesson by ID
+
 export const getLessonByIdController = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const { includeAssessments = false } = req.query;
@@ -124,7 +124,7 @@ export const getLessonByIdController = asyncHandler(async (req, res) => {
   ));
 });
 
-// ✅ Get adjacent lessons
+
 export const getAdjacentLessonsController = asyncHandler(async (req, res) => {
   const { id } = req.params;
   
@@ -141,7 +141,7 @@ export const getAdjacentLessonsController = asyncHandler(async (req, res) => {
   ));
 });
 
-// ✅ Get lessons by module
+
 export const getLessonsByModuleController = asyncHandler(async (req, res) => {
   const { module_id } = req.params;
   const { includeUnpublished = false, includeAssessments = false } = req.query;
@@ -173,7 +173,7 @@ export const getLessonsByModuleController = asyncHandler(async (req, res) => {
   ));
 });
 
-// 🆕 LESSON COMPLETION CONTROLLER - Production Ready
+
 export const markLessonCompleteController = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const { timeSpent = 0 } = req.body;
@@ -200,7 +200,7 @@ export const markLessonCompleteController = asyncHandler(async (req, res) => {
     // Update enrollment progress
     await updateEnrollmentProgress(userId, lesson.course_id, courseProgress);
 
-    // 🎯 Auto-generate certificate if course is 100% complete
+ 
     let certificateGenerated = false;
     if (courseProgress.percentage >= 100 && courseProgress.completed) {
       try {
@@ -209,7 +209,7 @@ export const markLessonCompleteController = asyncHandler(async (req, res) => {
         console.log(`🎓 Certificate auto-generated for user ${userId}, course ${lesson.course_id}`);
       } catch (certError) {
         console.warn('⚠️ Certificate generation failed:', certError.message);
-        // Don't fail the lesson completion if certificate generation fails
+        
       }
     }
 
@@ -225,12 +225,12 @@ export const markLessonCompleteController = asyncHandler(async (req, res) => {
     ));
 
   } catch (error) {
-    console.error('❌ Error in markLessonCompleteController:', error);
+    console.error(' Error in markLessonCompleteController:', error);
     throw new AppError('Failed to mark lesson as complete: ' + error.message, HTTP_STATUS.INTERNAL_SERVER_ERROR);
   }
 });
 
-// 🆕 GET USER'S PROGRESS FOR A LESSON
+
 export const getUserLessonProgressController = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const userId = req.user.id;
@@ -331,7 +331,7 @@ export const deleteLessonController = asyncHandler(async (req, res) => {
   res.status(HTTP_STATUS.OK).json(successResponse(null, 'Lesson deleted successfully'));
 });
 
-// ✅ Reorder lessons
+
 export const reorderLessonsController = asyncHandler(async (req, res) => {
   const { module_id } = req.params;
   const { lessonPositions } = req.body;
@@ -412,7 +412,7 @@ export const duplicateLessonController = asyncHandler(async (req, res) => {
   ));
 });
 
-// ✅ Toggle publish
+
 export const toggleLessonPublishStatusController = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const user = req.user;
@@ -432,7 +432,7 @@ export const toggleLessonPublishStatusController = asyncHandler(async (req, res)
   res.status(HTTP_STATUS.OK).json(successResponse(updatedLesson, `Lesson ${action} successfully`));
 });
 
-// ✅ Navigation lessons
+
 export const getCourseLessonsNavigationController = asyncHandler(async (req, res) => {
   const { course_id } = req.params;
   const user = req.user;
@@ -477,7 +477,7 @@ export const searchLessonsInCourseController = asyncHandler(async (req, res) => 
   ));
 });
 
-// ✅ FINAL EXPORTS - Enhanced with progress tracking
+
 export default {
   createLessonController,
   getLessonByIdController,

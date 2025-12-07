@@ -14,6 +14,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import NotFound from './pages/NotFound';
 import DashboardRedirect from './pages/DashboardRedirect';
+import GoogleAuthCallback from './pages/GoogleAuthCallback';
 
 // Pages - Course Related
 import Courses from './pages/Courses';
@@ -52,7 +53,7 @@ import AdminUserList from './pages/AdminUserList';
 import AdminUserActivity from './pages/AdminUserActivity';
 import AdminUserStats from './pages/AdminUserStats';
 
-// 🆕 AI Recommendation System Pages
+// AI Recommendation System Pages
 import RecommendationsWidget from './pages/RecommendationsWidget';
 import UserPreferences from './pages/UserPreferences';
 import LearningAnalytics from './pages/LearningAnalytics';
@@ -67,6 +68,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/auth/success" element={<GoogleAuthCallback />} />
             <Route path="/courses" element={<Courses />} />
 
             {/* Role-Based Dashboard Redirect */}
@@ -79,7 +81,7 @@ function App() {
               }
             />
 
-            {/* 🆕 AI Recommendation System Routes */}
+            {/* AI Recommendation System Routes */}
             <Route
               path="/recommendations"
               element={
@@ -276,7 +278,7 @@ function App() {
               element={<Navigate to="/admin/users" replace />}
             />
 
-            {/* 404 */}
+            {/* 404 Not Found */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>

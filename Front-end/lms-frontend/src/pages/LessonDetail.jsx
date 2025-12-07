@@ -73,24 +73,24 @@ function LessonDetail() {
       setLoading(true);
       setError(null);
 
-      // Fetch lesson details with progress
+    
       const lessonResponse = await apiGet(`/lessons/${lessonId}`);
       if (lessonResponse.success) {
         setLesson(lessonResponse.data);
         
-        // Set lesson progress if available
+      
         if (lessonResponse.data.userProgress) {
           setLessonProgress(lessonResponse.data.userProgress);
         }
         
-        // Fetch course details
+       
         const courseResponse = await apiGet(`/courses/${courseId}`);
         if (courseResponse.success) {
           setCourse(courseResponse.data);
         }
       }
 
-      // Fetch quizzes for this lesson
+     
       try {
         const quizzesResponse = await apiGet(`/quizzes/lesson/${lessonId}?forStudent=true`);
         if (quizzesResponse.success) {
@@ -101,7 +101,7 @@ function LessonDetail() {
         setQuizzes([]);
       }
 
-      // Fetch assignments for this lesson
+     
       try {
         const assignmentsResponse = await apiGet(`/assignments/lesson/${lessonId}`);
         if (assignmentsResponse.success) {
@@ -122,7 +122,7 @@ function LessonDetail() {
         console.error('Error fetching adjacent lessons:', adjacentError);
       }
 
-      // Fetch user progress for this course (if student)
+  
       if (user?.role === 'student') {
         try {
           const progressResponse = await apiGet(`/enrollments/course/${courseId}/progress`);
@@ -142,12 +142,12 @@ function LessonDetail() {
     }
   };
 
-  // Enhanced lesson completion with certificate handling
+  
   const markAsComplete = async () => {
     try {
       setMarkingComplete(true);
       
-      // Calculate time spent on lesson
+  
       const timeSpent = startTime ? Math.floor((Date.now() - startTime) / 1000) : 0;
       
       const response = await apiPost(`/lessons/${lessonId}/complete`, {
@@ -232,7 +232,7 @@ function LessonDetail() {
     try {
       navigate(`/courses/${courseId}/assignments/${assignmentId}`);
     } catch (navError) {
-      console.error('❌ Assignment navigation error:', navError);
+      console.error(' Assignment navigation error:', navError);
       alert('Error navigating to assignment. Please try again.');
     }
   };
@@ -699,7 +699,7 @@ function LessonDetail() {
         </DialogActions>
       </Dialog>
 
-      {/* Success Message Snackbar */}
+      
       <Snackbar
         open={!!successMessage}
         autoHideDuration={6000}

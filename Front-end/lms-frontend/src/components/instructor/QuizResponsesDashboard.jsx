@@ -73,7 +73,7 @@ const QuizResponsesDashboard = () => {
         setStudentResponses(data.data || []);
       } else {
         console.log('Quiz responses endpoint might not exist yet - using sample data');
-        // Sample data structure for development
+       ]
         setStudentResponses([
           {
             id: 1,
@@ -300,7 +300,7 @@ const QuizResponsesDashboard = () => {
         </Grid>
       </Paper>
 
-      {/* Responses Table */}
+     
       <Paper elevation={3} sx={{ borderRadius: 2 }}>
         <Box sx={{ p: 3, borderBottom: 1, borderColor: 'divider' }}>
           <Typography variant="h6">

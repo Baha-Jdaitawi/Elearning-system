@@ -22,7 +22,7 @@ const router = express.Router();
 // All routes require authentication
 router.use(authenticate);
 
-// ✅ Add assignment to lesson — fix for frontend route
+
 router.post(
   '/lesson/:lesson_id',
   authorize(USER_ROLES.INSTRUCTOR, USER_ROLES.ADMIN),
@@ -40,7 +40,7 @@ router.get('/lesson/:lesson_id', getAssignmentsByLessonController);
 // Get assignments by course
 router.get('/course/:course_id', getAssignmentsByCourseController);
 
-// Create assignment (generic — not used in your frontend)
+
 router.post(
   '/',
   authorize(USER_ROLES.INSTRUCTOR, USER_ROLES.ADMIN),

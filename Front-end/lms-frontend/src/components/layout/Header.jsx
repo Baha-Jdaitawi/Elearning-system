@@ -86,7 +86,7 @@ const Header = () => {
       logoutUser();
       navigate('/');
     } catch {
-      // Even if logout API fails, clear local auth state
+     
       logoutUser();
       navigate('/');
     }
@@ -141,7 +141,7 @@ const Header = () => {
           </Box>
         </Link>
 
-        {/* Navigation Links */}
+ 
         <Box sx={{ display: { xs: 'none', md: 'flex' }, mr: 3 }}>
           <Button 
             color="inherit" 

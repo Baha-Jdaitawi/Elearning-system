@@ -20,7 +20,7 @@ import submissionRoutes from './submissionRoutes.js';
 // Certificate system routes
 import certificateRoutes from './certificateRoutes.js';
 
-// 🆕 AI Recommendation system routes
+
 import recommendationRoutes from './recommendationRoutes.js';
 
 const router = express.Router();
@@ -68,7 +68,7 @@ router.use('/enrollments', enrollmentRoutes);
 // Certificate generation routes
 router.use('/certificates', certificateRoutes);
 
-// 🆕 AI Recommendation system routes
+
 router.use('/recommendations', recommendationRoutes);
 
 // API Documentation route

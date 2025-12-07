@@ -25,10 +25,10 @@ import { USER_ROLES } from '../utils/constants.js';
 
 const router = express.Router();
 
-// All routes require authentication
+
 router.use(authenticate);
 
-// Get quizzes by lesson - with enrollment check
+//
 router.get('/lesson/:lesson_id', authorizeEnrolledStudentForLesson, getQuizzesByLessonController);
 
 // Course quiz operations
@@ -42,7 +42,7 @@ router.post('/lesson/:lesson_id/submit', authorizeEnrolledStudentForLesson, [
   handleValidationErrors
 ], submitQuizAnswersController);
 
-// Quiz CRUD operations (instructors/admins)
+
 router.post('/', authorize(USER_ROLES.INSTRUCTOR, USER_ROLES.ADMIN), validateQuizCreation, createQuizController);
 
 router.get('/:id', validateId, getQuizByIdController);

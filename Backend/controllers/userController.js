@@ -18,7 +18,7 @@ import {
 import { AppError, asyncHandler } from '../middleware/errorHandler.js';
 import { HTTP_STATUS, MESSAGES, USER_ROLES } from '../utils/constants.js';
 
-// Get all users (Admin only)
+
 export const getUsers = asyncHandler(async (req, res) => {
   const { page, limit, offset } = getPaginationParams(req);
   const { role, search, sortBy, sortOrder } = req.query;
@@ -50,7 +50,7 @@ export const getUserById = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const requestingUser = req.user;
 
-  // Users can only view their own profile unless they're admin
+
   if (requestingUser.role !== USER_ROLES.ADMIN && parseInt(id) !== requestingUser.id) {
     throw new AppError('Access denied. You can only view your own profile.', HTTP_STATUS.FORBIDDEN);
   }
@@ -72,7 +72,7 @@ export const updateUserById = asyncHandler(async (req, res) => {
   const requestingUser = req.user;
   const { name, email, role } = req.body;
 
-  // Users can only update their own profile unless they're admin
+ 
   if (requestingUser.role !== USER_ROLES.ADMIN && parseInt(id) !== requestingUser.id) {
     throw new AppError('Access denied. You can only update your own profile.', HTTP_STATUS.FORBIDDEN);
   }
@@ -84,7 +84,7 @@ export const updateUserById = asyncHandler(async (req, res) => {
   }
 
   if (email) {
-    // Check if new email already exists
+  
     const emailInUse = await emailExists(email.toLowerCase().trim(), parseInt(id));
     if (emailInUse) {
       throw new AppError(MESSAGES.EMAIL_EXISTS, HTTP_STATUS.CONFLICT);
@@ -93,7 +93,7 @@ export const updateUserById = asyncHandler(async (req, res) => {
     updates.email_verified = false; // Reset verification if email changed
   }
 
-  // Only admins can change roles
+ 
   if (role && requestingUser.role === USER_ROLES.ADMIN) {
     if (!Object.values(USER_ROLES).includes(role)) {
       throw new AppError('Invalid role specified', HTTP_STATUS.BAD_REQUEST);
@@ -116,12 +116,12 @@ export const updateUserById = asyncHandler(async (req, res) => {
   ));
 });
 
-// Delete user (Admin only)
+
 export const deleteUserById = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const requestingUser = req.user;
 
-  // Prevent admin from deleting themselves
+  
   if (parseInt(id) === requestingUser.id) {
     throw new AppError('You cannot delete your own account', HTTP_STATUS.BAD_REQUEST);
   }

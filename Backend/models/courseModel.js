@@ -140,7 +140,7 @@ export const getAllCourses = async (options = {}) => {
   const countResult = await query(countQuery, params);
   const totalCount = parseInt(countResult.rows[0].total);
 
-  // Main query - ✅ ONLY CHANGE: Added c.category_id to SELECT
+ 
   const coursesQuery = `
     SELECT 
       c.id, c.title, c.description, c.price, c.thumbnail, c.level, 

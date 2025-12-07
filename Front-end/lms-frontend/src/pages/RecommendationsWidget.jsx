@@ -1,4 +1,4 @@
-// pages/RecommendationsWidget.jsx
+
 import { useState, useEffect } from 'react';
 import {
   Container,

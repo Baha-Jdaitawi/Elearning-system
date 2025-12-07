@@ -15,7 +15,7 @@ import { USER_ROLES } from '../utils/constants.js';
 
 const router = express.Router();
 
-// Public verification endpoint (no auth required)
+
 router.get('/verify/:certificateId',
   [
     param('certificateId').isInt({ min: 1 }).withMessage('Valid certificate ID is required'),
@@ -24,10 +24,10 @@ router.get('/verify/:certificateId',
   verifyCertificate
 );
 
-// All other routes require authentication
+
 router.use(authenticate);
 
-// Generate certificate (manual trigger by admin/instructor)
+
 router.post('/generate/:userId/:courseId', 
   authorize(USER_ROLES.ADMIN, USER_ROLES.INSTRUCTOR),
   [
@@ -38,7 +38,7 @@ router.post('/generate/:userId/:courseId',
   generateCertificateController
 );
 
-// Download certificate
+
 router.get('/download/:userId/:courseId',
   [
     param('userId').isInt({ min: 1 }).withMessage('Valid user ID is required'),
@@ -48,7 +48,7 @@ router.get('/download/:userId/:courseId',
   downloadCertificate
 );
 
-// Get certificate by ID (authenticated)
+
 router.get('/:certificateId',
   [
     param('certificateId').isInt({ min: 1 }).withMessage('Valid certificate ID is required'),
@@ -78,7 +78,7 @@ router.get('/course/:courseId/check',
   checkCertificateExists
 );
 
-// Get certificate for specific course (if exists)
+
 router.get('/course/:courseId/user/:userId',
   [
     param('courseId').isInt({ min: 1 }).withMessage('Valid course ID is required'),

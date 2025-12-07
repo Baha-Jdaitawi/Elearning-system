@@ -103,11 +103,11 @@ const CourseDetail = () => {
               }
             }
           } catch {
-            // Not enrolled or error checking enrollment
+            
           }
         }
 
-        // If user is the instructor, fetch modules anyway for preview
+       
         if (isAuthenticated && user && courseResponse.data && user.id === courseResponse.data.instructor_id) {
           try {
             const modulesResponse = await apiGet(`/modules/course/${id}?includeLessons=true`);
@@ -115,7 +115,7 @@ const CourseDetail = () => {
               setModules(modulesResponse.data.modules || []);
             }
           } catch {
-            // Error fetching modules
+          
           }
         }
       } catch {
@@ -260,9 +260,9 @@ const CourseDetail = () => {
             </Alert>
           )}
 
-          {/* Different buttons based on user type */}
+        
           {isInstructor ? (
-            // Instructor View - Course Management Buttons
+           
             <Box sx={{ display: 'flex', gap: 2 }}>
               <Button
                 variant="contained"
@@ -434,7 +434,7 @@ const CourseDetail = () => {
         </Card>
       )}
 
-      {/* Course Requirements Section for Non-Enrolled Users */}
+    
       {!isEnrolled && !isInstructor && course.requirements && (
         <Card sx={{ mt: 3 }}>
           <CardContent sx={{ p: 4 }}>

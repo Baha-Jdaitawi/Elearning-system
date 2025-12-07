@@ -236,11 +236,11 @@ export const bulkDeleteCategories = asyncHandler(async (req, res) => {
   }, `Bulk delete completed. ${results.length} categories deleted.`));
 });
 
-// Get category course distribution
+
 export const getCategoryDistribution = asyncHandler(async (req, res) => {
   const categories = await getCategoriesWithCourseCount();
 
-  // Group categories by course count ranges
+
   const distribution = {
     empty: categories.filter(cat => cat.course_count === 0).length,
     low: categories.filter(cat => cat.course_count >= 1 && cat.course_count <= 5).length,
@@ -276,19 +276,19 @@ export const mergeCategories = asyncHandler(async (req, res) => {
     throw new AppError('Target category ID is required', HTTP_STATUS.BAD_REQUEST);
   }
 
-  // Verify target category exists
+  
   const targetCategory = await getCategoryById(parseInt(targetCategoryId));
   if (!targetCategory) {
     throw new AppError('Target category not found', HTTP_STATUS.NOT_FOUND);
   }
 
-  // Move all courses from source categories to target category
+  
   let movedCourses = 0;
   const errors = [];
 
   for (const sourceCategoryId of sourceCategoryIds) {
     if (parseInt(sourceCategoryId) === parseInt(targetCategoryId)) {
-      continue; // Skip if source is same as target
+      continue; 
     }
 
     try {

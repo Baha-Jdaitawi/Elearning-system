@@ -27,21 +27,21 @@ pool.on('error', (err) => {
   process.exit(-1);
 });
 
-// Test database connection
+
 export const testConnection = async () => {
   try {
     const client = await pool.connect();
     const result = await client.query('SELECT NOW()');
-    console.log('✅ Database connected successfully at:', result.rows[0].now);
+    console.log(' Database connected successfully at:', result.rows[0].now);
     client.release();
     return true;
   } catch (error) {
-    console.error('❌ Database connection failed:', error.message);
+    console.error(' Database connection failed:', error.message);
     return false;
   }
 };
 
-// Execute query function
+
 export const query = async (text, params) => {
   const start = Date.now();
   try {
@@ -49,7 +49,7 @@ export const query = async (text, params) => {
     const duration = Date.now() - start;
     
     if (process.env.NODE_ENV === 'development') {
-      console.log('📊 Query executed:', {
+      console.log(' Query executed:', {
         text: text.substring(0, 100) + (text.length > 100 ? '...' : ''),
         duration: `${duration}ms`,
         rows: result.rowCount
@@ -59,7 +59,7 @@ export const query = async (text, params) => {
     return result;
   } catch (error) {
     const duration = Date.now() - start;
-    console.error('❌ Query error:', {
+    console.error(' Query error:', {
       text: text.substring(0, 100) + (text.length > 100 ? '...' : ''),
       duration: `${duration}ms`,
       error: error.message
@@ -68,7 +68,7 @@ export const query = async (text, params) => {
   }
 };
 
-// Get a client from the pool (for transactions)
+
 export const getClient = async () => {
   return await pool.connect();
 };
@@ -76,7 +76,7 @@ export const getClient = async () => {
 // Close all connections
 export const closePool = async () => {
   await pool.end();
-  console.log('🔒 Database pool closed');
+  console.log(' Database pool closed');
 };
 
 // Graceful shutdown

@@ -48,7 +48,7 @@ const Courses = () => {
           setCategories(response.data);
         }
       } catch {
-        // Handle silently
+       
       }
     };
     fetchCategories();

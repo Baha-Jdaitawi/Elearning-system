@@ -30,17 +30,15 @@ export const submitAssignmentController = asyncHandler(async (req, res) => {
 
   const assignment = assignmentResult.rows[0];
 
-  // Check if student is enrolled in the course
-  // TODO: Add enrollment check
+ 
 
-  // Check if assignment is past due
+
   const isLate = assignment.due_date && isDatePast(assignment.due_date);
   
   if (isLate && !assignment.allow_late_submission) {
     throw new AppError('Assignment submission deadline has passed', HTTP_STATUS.BAD_REQUEST);
   }
 
-  // Check if student already submitted
   const existingSubmission = await query(
     'SELECT id FROM submissions WHERE assignment_id = $1 AND student_id = $2',
     [parseInt(assignment_id), userId]
@@ -111,13 +109,13 @@ export const getSubmissionByIdController = asyncHandler(async (req, res) => {
   ));
 });
 
-// Get submissions by assignment (instructor view)
+
 export const getSubmissionsByAssignmentController = asyncHandler(async (req, res) => {
   const { assignment_id } = req.params;
   const { page = 1, limit = 10, graded, sortBy = 'submitted_at', sortOrder = 'DESC' } = req.query;
   const user = req.user;
 
-  // Validate assignment exists and check ownership
+ 
   const assignmentResult = await query(
     `SELECT a.*, c.instructor_id, c.title as course_title
      FROM assignments a
@@ -134,7 +132,7 @@ export const getSubmissionsByAssignmentController = asyncHandler(async (req, res
 
   const assignment = assignmentResult.rows[0];
 
-  // Check if user owns the course or is admin
+ 
   if (user.role !== USER_ROLES.ADMIN && assignment.instructor_id !== user.id) {
     throw new AppError('Access denied', HTTP_STATUS.FORBIDDEN);
   }
@@ -150,14 +148,14 @@ export const getSubmissionsByAssignmentController = asyncHandler(async (req, res
 
   const whereClause = whereConditions.join(' AND ');
 
-  // Get total count
+
   const countResult = await query(
     `SELECT COUNT(*) as total FROM submissions s WHERE ${whereClause}`,
     params
   );
   const totalCount = parseInt(countResult.rows[0].total);
 
-  // Get submissions
+
   params.push(parseInt(limit), offset);
   const submissionsResult = await query(
     `SELECT s.id, s.content, s.file_path, s.grade, s.feedback, s.is_late, 
@@ -194,13 +192,13 @@ export const getSubmissionsByAssignmentController = asyncHandler(async (req, res
   ));
 });
 
-// Grade submission
+
 export const gradeSubmissionController = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const { grade, feedback } = req.body;
   const user = req.user;
 
-  // Get submission with assignment info
+ 
   const submissionResult = await query(
     `SELECT s.*, a.max_points, c.instructor_id
      FROM submissions s
@@ -228,7 +226,7 @@ export const gradeSubmissionController = asyncHandler(async (req, res) => {
     throw new AppError(`Grade must be between 0 and ${submission.max_points}`, HTTP_STATUS.BAD_REQUEST);
   }
 
-  // Calculate final grade with late penalty if applicable
+ 
   let finalGrade = grade;
   if (submission.is_late) {
     // Get assignment late penalty

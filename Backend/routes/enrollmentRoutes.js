@@ -32,7 +32,7 @@ const router = express.Router();
 // All routes require authentication
 router.use(authenticate);
 
-// Admin routes (put these FIRST to avoid conflicts)
+
 router.get('/stats', authorize(USER_ROLES.ADMIN), getEnrollmentStatsController);
 router.get('/recent', authorize(USER_ROLES.ADMIN, USER_ROLES.INSTRUCTOR), getRecentEnrollmentsController);
 

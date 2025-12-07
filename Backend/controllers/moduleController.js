@@ -322,7 +322,7 @@ export const toggleModulePublishStatusController = asyncHandler(async (req, res)
     throw new AppError('Module not found', HTTP_STATUS.NOT_FOUND);
   }
 
-  // Check if user owns the course or is admin
+
   if (user.role !== USER_ROLES.ADMIN && moduleWithCourse.instructor_id !== user.id) {
     throw new AppError('Access denied', HTTP_STATUS.FORBIDDEN);
   }

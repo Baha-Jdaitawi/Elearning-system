@@ -53,7 +53,7 @@ const CreateQuiz = () => {
   const [course, setCourse] = useState(null);
   const [activeStep, setActiveStep] = useState(0);
   
-  // Quiz metadata
+ 
   const [quizMetadata, setQuizMetadata] = useState({
     title: '',
     description: '',
@@ -61,7 +61,7 @@ const CreateQuiz = () => {
     is_published: false
   });
   
-  // Questions array
+
   const [questions, setQuestions] = useState([
     {
       id: 1,
@@ -83,13 +83,13 @@ const CreateQuiz = () => {
 
   const fetchData = async () => {
     try {
-      // Fetch lesson details
+  
       const lessonResponse = await apiGet(`/lessons/${lessonId}`);
       if (lessonResponse.success) {
         setLesson(lessonResponse.data);
       }
 
-      // Fetch course details
+   
       const courseResponse = await apiGet(`/courses/${courseId}`);
       if (courseResponse.success) {
         setCourse(courseResponse.data);
@@ -160,7 +160,7 @@ const CreateQuiz = () => {
       points: 10
     };
     setQuestions([...questions, newQuestion]);
-    setActiveStep(questions.length); // Move to new question
+    setActiveStep(questions.length); 
   };
 
   const removeQuestion = (index) => {
@@ -236,7 +236,7 @@ const CreateQuiz = () => {
     setError(null);
 
     try {
-      // Prepare quiz data for bulk creation - fixed field names
+     
       const quizzesData = questions.map(q => ({
         title: `${quizMetadata.title} - Q${q.id}`,
         description: quizMetadata.description,

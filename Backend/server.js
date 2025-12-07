@@ -10,27 +10,33 @@ import { fileURLToPath } from 'url';
 import { testConnection } from './database/connection.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import routes from './routes/index.js';
-import certificateRoutes from './routes/certificateRoutes.js'; // ✅ Added certificate functionality
+import certificateRoutes from './routes/certificateRoutes.js';
 
 // Load environment variables
 dotenv.config();
 
-// ✅ Added ES module path handling
+
+console.log('🔍 GOOGLE_CLIENT_ID:', process.env.GOOGLE_CLIENT_ID);
+console.log('🔍 GOOGLE_CLIENT_SECRET:', process.env.GOOGLE_CLIENT_SECRET ? 'EXISTS' : 'MISSING');
+console.log('🔍 GOOGLE_CALLBACK_URL:', process.env.GOOGLE_CALLBACK_URL);
+console.log('🔍 CLIENT_URL:', process.env.CLIENT_URL);
+
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = process.env.PORT || 3003; // ✅ FIXED: Changed back to 3003
+const PORT = process.env.PORT || 3003;
 
 // Security middleware
 app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" }
 }));
 
-// ✅ FIXED: Increased rate limiting for development
+
 const limiter = rateLimit({
-  windowMs: parseInt(process.env.RATE_LIMIT_WINDOW) * 60 * 1000 || 15 * 60 * 1000, // 15 minutes
-  max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 1000, // ✅ INCREASED: 1000 requests instead of 100
+  windowMs: parseInt(process.env.RATE_LIMIT_WINDOW) * 60 * 1000 || 15 * 60 * 1000,
+  max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 1000,
   message: {
     error: 'Too many requests from this IP, please try again later.',
     retryAfter: Math.ceil(parseInt(process.env.RATE_LIMIT_WINDOW) || 15)
@@ -38,17 +44,15 @@ const limiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   skip: (req) => {
-    // ✅ FIXED: Skip rate limiting for development
     return process.env.NODE_ENV === 'development';
   }
 });
 
 app.use(limiter);
 
-// ✅ ENHANCED CORS configuration - Fixed preflight issues
+
 const corsOptions = {
   origin: function (origin, callback) {
-    // Allow requests with no origin (mobile apps, Postman, etc.)
     const allowedOrigins = [
       'http://localhost:5173',
       'http://localhost:3000',
@@ -72,16 +76,13 @@ const corsOptions = {
     'Accept',
     'Origin'
   ],
-  optionsSuccessStatus: 200 // Some legacy browsers (IE11, various SmartTVs) choke on 204
+  optionsSuccessStatus: 200
 };
 
-// ✅ FIXED: Apply CORS before other middleware
 app.use(cors(corsOptions));
-
-// ✅ FIXED: Handle preflight requests explicitly
 app.options('*', cors(corsOptions));
 
-// ✅ FIXED: Additional CORS headers middleware
+
 app.use((req, res, next) => {
   const origin = req.headers.origin;
   const allowedOrigins = [
@@ -98,7 +99,7 @@ app.use((req, res, next) => {
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, x-csrf-token, X-Requested-With, Accept, Origin');
   res.header('Access-Control-Allow-Credentials', 'true');
-  res.header('Access-Control-Max-Age', '86400'); // Cache preflight for 24 hours
+  res.header('Access-Control-Max-Age', '86400');
   
   if (req.method === 'OPTIONS') {
     res.sendStatus(200);
@@ -122,9 +123,9 @@ if (process.env.NODE_ENV === 'development') {
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// ✅ Enhanced static file serving with path handling
+// Static file serving
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-app.use('/uploads/certificates', express.static(path.join(__dirname, 'uploads/certificates'))); // ✅ Added certificate uploads
+app.use('/uploads/certificates', express.static(path.join(__dirname, 'uploads/certificates')));
 
 // Health check endpoint
 app.get('/health', (req, res) => {
@@ -139,11 +140,9 @@ app.get('/health', (req, res) => {
 
 // API routes
 app.use('/api', routes);
-
-// ✅ Certificate routes (Manual Generation)
 app.use('/api/certificates', certificateRoutes);
 
-// 404 handler with complete route list
+// 404 handler
 app.use('*', (req, res) => {
   res.status(404).json({
     success: false,
@@ -167,13 +166,13 @@ app.use('*', (req, res) => {
 // Global error handler
 app.use(errorHandler);
 
-// Start server function with automatic port finding
+// Start server function
 const startServer = async () => {
   try {
     // Test database connection
     const dbConnected = await testConnection();
     if (!dbConnected) {
-      console.error('❌ Failed to connect to database. Server not started.');
+      console.error(' Failed to connect to database. Server not started.');
       process.exit(1);
     }
 
@@ -206,10 +205,10 @@ const startServer = async () => {
       throw new Error('No available port found');
     };
 
-    // Find available port starting from PORT
+    // Find available port
     const availablePort = await findAvailablePort(PORT);
 
-    // Start server on available port
+    // Start server
     app.listen(availablePort, () => {
       console.log(`
 🚀 LMS Backend Server Started Successfully!
@@ -229,9 +228,10 @@ const startServer = async () => {
    • Credentials: Enabled
    • Rate Limiting: ${process.env.NODE_ENV === 'development' ? 'Disabled for development' : 'Enabled'}
 
-📋 Key Endpoints for Testing:
+📋 Key Endpoints:
    • POST http://localhost:${availablePort}/api/auth/register
    • POST http://localhost:${availablePort}/api/auth/login
+   • GET  http://localhost:${availablePort}/api/auth/google
    • GET  http://localhost:${availablePort}/api/courses
    • POST http://localhost:${availablePort}/api/courses
    • GET  http://localhost:${availablePort}/api/categories
@@ -239,42 +239,36 @@ const startServer = async () => {
    • GET  http://localhost:${availablePort}/api/certificates
    • POST http://localhost:${availablePort}/api/certificates/generate
 
-🆕 Certificate Features:
-   • Manual certificate generation
-   • PDF certificate downloads
-   • Certificate verification
-   • Static certificate file serving
-
-${availablePort !== PORT ? `⚠️  Note: Started on port ${availablePort} (${PORT} was in use)` : ''}
+${availablePort !== PORT ? `  Note: Started on port ${availablePort} (${PORT} was in use)` : ''}
       `);
     });
 
   } catch (error) {
-    console.error('❌ Failed to start server:', error);
+    console.error(' Failed to start server:', error);
     process.exit(1);
   }
 };
 
 // Handle unhandled promise rejections
 process.on('unhandledRejection', (err) => {
-  console.error('💥 Unhandled Promise Rejection:', err);
+  console.error(' Unhandled Promise Rejection:', err);
   process.exit(1);
 });
 
 // Handle uncaught exceptions
 process.on('uncaughtException', (err) => {
-  console.error('💥 Uncaught Exception:', err);
+  console.error(' Uncaught Exception:', err);
   process.exit(1);
 });
 
 // Graceful shutdown
 process.on('SIGTERM', () => {
-  console.log('👋 SIGTERM received, shutting down gracefully...');
+  console.log(' SIGTERM received, shutting down gracefully...');
   process.exit(0);
 });
 
 process.on('SIGINT', () => {
-  console.log('👋 SIGINT received, shutting down gracefully...');
+  console.log(' SIGINT received, shutting down gracefully...');
   process.exit(0);
 });
 

@@ -201,7 +201,7 @@ const InstructorLessonManagement = () => {
 
   const handleSaveLesson = async () => {
     try {
-      // API call to update lesson
+     
       setLesson(editFormData);
       setEditDialogOpen(false);
     } catch (error) {
@@ -211,7 +211,7 @@ const InstructorLessonManagement = () => {
 
   const handleDeleteLesson = async () => {
     try {
-      // API call to delete lesson
+      
       setDeleteDialogOpen(false);
       navigate(`/instructor/courses/${courseId}`);
     } catch (error) {

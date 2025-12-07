@@ -115,7 +115,7 @@ export const createCourseController = asyncHandler(async (req, res) => {
     throw new AppError('Invalid category selected', HTTP_STATUS.BAD_REQUEST);
   }
 
-  // ✅ FIXED - Correct parameter order: instructorId, title
+ 
   const titleExists = await courseTitleExistsForInstructor(instructor_id, title);
   if (titleExists) {
     throw new AppError('You already have a course with this title', HTTP_STATUS.CONFLICT);
@@ -437,18 +437,18 @@ export const duplicateCourse = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const user = req.user;
 
-  // Get original course
+
   const originalCourse = await getCourseById(parseInt(id), true);
   if (!originalCourse) {
     throw new AppError(MESSAGES.COURSE_NOT_FOUND, HTTP_STATUS.NOT_FOUND);
   }
 
-  // Check if user owns the course or is admin
+ 
   if (user.role !== USER_ROLES.ADMIN && originalCourse.instructor_id !== user.id) {
     throw new AppError('Access denied. You can only duplicate your own courses.', HTTP_STATUS.FORBIDDEN);
   }
 
-  // Create new course with copied data
+ 
   const newCourseData = {
     title: `${originalCourse.title} (Copy)`,
     description: originalCourse.description,
@@ -457,7 +457,7 @@ export const duplicateCourse = asyncHandler(async (req, res) => {
     price: 0.00,
     level: originalCourse.level,
     duration_weeks: originalCourse.duration_weeks,
-    is_published: false // Always create as unpublished
+    is_published: false 
   };
 
   const newCourse = await createCourse(newCourseData);

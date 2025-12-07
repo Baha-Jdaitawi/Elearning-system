@@ -314,7 +314,7 @@ export const getInstructorEnrollments = async (instructorId, options = {}) => {
   };
 };
 
-// Calculate detailed progress for user in course
+
 export const calculateCourseProgress = async (userId, courseId) => {
   const client = await getClient();
   
@@ -337,9 +337,7 @@ export const calculateCourseProgress = async (userId, courseId) => {
       return { progress: 0, completedLessons: 0, totalLessons: 0 };
     }
 
-    // This is a simplified progress calculation
-    // In a real system, you might track individual lesson completions
-    // For now, we'll use the existing progress from enrollments table
+  
     const enrollmentResult = await client.query(
       'SELECT progress FROM enrollments WHERE user_id = $1 AND course_id = $2',
       [userId, courseId]

@@ -30,7 +30,7 @@ import {
 import { apiGet } from '../services/api';
 
 const InstructorStudents = () => {
-  const { id } = useParams(); // course ID
+  const { id } = useParams(); 
   const navigate = useNavigate();
   const [students, setStudents] = useState([]);
   const [course, setCourse] = useState(null);
@@ -45,13 +45,13 @@ const InstructorStudents = () => {
     try {
       setLoading(true);
       
-      // Fetch course details
+     
       const courseResponse = await apiGet(`/courses/${id}`);
       if (courseResponse.success) {
         setCourse(courseResponse.data);
       }
 
-      // Fetch enrolled students
+    
       const studentsResponse = await apiGet(`/enrollments/course/${id}/students`);
       if (studentsResponse.success) {
         setStudents(studentsResponse.data.enrollments || []);

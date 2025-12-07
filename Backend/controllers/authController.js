@@ -22,16 +22,16 @@ import {
 import { AppError, asyncHandler } from '../middleware/errorHandler.js';
 import { HTTP_STATUS, MESSAGES } from '../utils/constants.js';
 
-// Configure Passport strategies
+
 const configurePassport = () => {
-  // Google OAuth Strategy
+ 
   passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: process.env.GOOGLE_CALLBACK_URL || "/api/auth/google/callback"
   }, async (accessToken, refreshToken, profile, done) => {
     try {
-      // Check if user exists with Google ID
+    
       let user = await findUserByGoogleId(profile.id);
       
       if (user) {
@@ -39,11 +39,11 @@ const configurePassport = () => {
         return done(null, user);
       }
 
-      // Check if user exists with same email
+   
       user = await findUserByEmail(profile.emails[0].value);
       
       if (user) {
-        // Link Google account to existing user
+        
         user.google_id = profile.id;
         user.avatar = user.avatar || profile.photos[0]?.value;
         await updateUser(user.id, { 
@@ -55,13 +55,13 @@ const configurePassport = () => {
         return done(null, user);
       }
 
-      // Create new user
+     
       const newUser = await createUser({
         name: profile.displayName,
         email: profile.emails[0].value,
         google_id: profile.id,
         avatar: profile.photos[0]?.value,
-        role: 'student' // Default role for Google sign-ups
+        role: 'student' 
       });
 
       await updateLastLogin(newUser.id);
@@ -102,7 +102,7 @@ const configurePassport = () => {
   });
 };
 
-// Initialize passport configuration
+
 configurePassport();
 
 // Register new user

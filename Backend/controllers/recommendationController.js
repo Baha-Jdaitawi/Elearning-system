@@ -1,4 +1,4 @@
-// controllers/recommendationController.js - FIXED VERSION
+
 import {
   trackUserInteraction,
   getUserLearningProfile,
@@ -12,23 +12,23 @@ import { successResponse, errorResponse } from '../utils/helpers.js';
 import { AppError, asyncHandler } from '../middleware/errorHandler.js';
 import { HTTP_STATUS, USER_ROLES } from '../utils/constants.js';
 
-// Get personalized course recommendations
+
 export const getRecommendationsController = asyncHandler(async (req, res) => {
   const userId = req.user.id;
   const { limit = 5, refresh = false } = req.query;
 
   let recommendations;
 
-  // Check for cached recommendations first (unless refresh requested)
+
   if (!refresh) {
     recommendations = await getCachedRecommendations(userId);
   }
 
-  // Generate new recommendations if no cache or refresh requested
+
   if (!recommendations || recommendations.length === 0 || refresh) {
     recommendations = await getSmartRecommendationsWithFallback(userId, parseInt(limit));
     
-    // Cache the new recommendations
+  
     if (recommendations.length > 0) {
       await cacheRecommendations(userId, recommendations);
     }
@@ -44,7 +44,7 @@ export const getRecommendationsController = asyncHandler(async (req, res) => {
   ));
 });
 
-// Track user interaction for better recommendations
+
 export const trackInteractionController = asyncHandler(async (req, res) => {
   const userId = req.user.id;
   const { courseId, lessonId, interactionType, metadata } = req.body;
@@ -66,19 +66,19 @@ export const trackInteractionController = asyncHandler(async (req, res) => {
   ));
 });
 
-// 🔧 FIXED: Get user's learning profile
+
 export const getLearningProfileController = asyncHandler(async (req, res) => {
   const { userId } = req.params;
   const requestingUser = req.user;
 
-  // 🔧 FIX: Allow users to access their own profile
+
   if (requestingUser.role !== USER_ROLES.ADMIN && requestingUser.id !== parseInt(userId)) {
     throw new AppError('Access denied', HTTP_STATUS.FORBIDDEN);
   }
 
   const profile = await getUserLearningProfile(parseInt(userId));
 
-  // 🔧 FIX: Return default profile if none exists
+  
   const defaultProfile = {
     name: requestingUser.name,
     email: requestingUser.email,
@@ -104,7 +104,7 @@ export const getLearningProfileController = asyncHandler(async (req, res) => {
   ));
 });
 
-// 🔧 FIXED: Update user preferences
+
 export const updatePreferencesController = asyncHandler(async (req, res) => {
   const userId = req.user.id;
   const {
@@ -116,7 +116,7 @@ export const updatePreferencesController = asyncHandler(async (req, res) => {
     learning_style
   } = req.body;
 
-  // 🔧 FIX: Use query function properly
+
   await query(`
     INSERT INTO user_preferences 
     (user_id, learning_goals, preferred_difficulty, time_availability, interests, preferred_topics, learning_style, updated_at)

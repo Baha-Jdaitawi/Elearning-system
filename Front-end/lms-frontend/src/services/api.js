@@ -78,7 +78,7 @@ export const assignmentAPI = {
   uploadSubmission: (formData) => apiUpload('/submissions', formData),
 };
 
-// ✅ User APIs
+//  User APIs
 export const userAPI = {
   getAllUsers: () => apiGet('/users'),
   getUserStats: () => apiGet('/users/stats'),

@@ -1,7 +1,7 @@
 // models/progressModel.js
 import { query } from '../database/connection.js';
 
-// Mark lesson as complete for a user
+
 export const markLessonComplete = async (userId, lessonId, timeSpent = 0) => {
   const result = await query(
     `INSERT INTO lesson_progress (user_id, lesson_id, completed, completed_at, time_spent)
@@ -18,7 +18,7 @@ export const markLessonComplete = async (userId, lessonId, timeSpent = 0) => {
   return result.rows[0];
 };
 
-// Get user's progress for a specific lesson
+
 export const getUserLessonProgress = async (userId, lessonId) => {
   const result = await query(
     `SELECT lp.*, l.title as lesson_title, l.video_duration
@@ -30,7 +30,7 @@ export const getUserLessonProgress = async (userId, lessonId) => {
   return result.rows[0] || null;
 };
 
-// Get all progress data for a lesson (for instructors)
+
 export const getLessonProgress = async (lessonId) => {
   const result = await query(
     `SELECT lp.*, u.name as student_name, u.email as student_email
@@ -43,7 +43,7 @@ export const getLessonProgress = async (lessonId) => {
   return result.rows;
 };
 
-// Calculate course progress for a user
+
 export const calculateCourseProgress = async (userId, courseId) => {
   const result = await query(
     `WITH course_lessons AS (
@@ -83,7 +83,7 @@ export const calculateCourseProgress = async (userId, courseId) => {
   };
 };
 
-// Update enrollment progress
+
 export const updateEnrollmentProgress = async (userId, courseId, progressData) => {
   const result = await query(
     `UPDATE enrollments 
@@ -102,7 +102,7 @@ export const updateEnrollmentProgress = async (userId, courseId, progressData) =
   return result.rows[0];
 };
 
-// Get user's progress for all lessons in a course
+
 export const getUserCourseProgress = async (userId, courseId) => {
   const result = await query(
     `SELECT 
@@ -124,7 +124,7 @@ export const getUserCourseProgress = async (userId, courseId) => {
   return result.rows;
 };
 
-// Get course completion statistics (for instructors)
+
 export const getCourseCompletionStats = async (courseId) => {
   const result = await query(
     `WITH course_lessons AS (
@@ -170,7 +170,7 @@ export const getCourseCompletionStats = async (courseId) => {
   return result.rows;
 };
 
-// Get user's overall learning statistics
+
 export const getUserLearningStats = async (userId) => {
   const result = await query(
     `SELECT 
@@ -188,9 +188,9 @@ export const getUserLearningStats = async (userId) => {
   return result.rows[0];
 };
 
-// Check if user has completed all prerequisites for a lesson
+
 export const checkLessonPrerequisites = async (userId, lessonId) => {
-  // Get all previous lessons in the same course
+  
   const result = await query(
     `WITH lesson_course AS (
        SELECT m.course_id, l.module_id, l.position as lesson_position, m.position as module_position
@@ -234,7 +234,6 @@ export const checkLessonPrerequisites = async (userId, lessonId) => {
   };
 };
 
-// Reset lesson progress (for testing or admin purposes)
 export const resetLessonProgress = async (userId, lessonId) => {
   const result = await query(
     `DELETE FROM lesson_progress 
@@ -245,7 +244,7 @@ export const resetLessonProgress = async (userId, lessonId) => {
   return result.rows[0];
 };
 
-// Get recent learning activity for a user
+
 export const getRecentLearningActivity = async (userId, limit = 10) => {
   const result = await query(
     `SELECT 

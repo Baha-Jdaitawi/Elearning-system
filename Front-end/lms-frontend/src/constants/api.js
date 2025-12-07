@@ -1,7 +1,7 @@
 // API base URL
 export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3003/api';
 
-// API endpoints - matching your backend routes exactly
+
 export const API_ENDPOINTS = {
   // Auth endpoints
   AUTH: {

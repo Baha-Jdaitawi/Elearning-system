@@ -98,7 +98,7 @@ export const updateUserPassword = async (id, newPassword) => {
   return result.rows[0] || null;
 };
 
-// Update last login
+
 export const updateLastLogin = async (id) => {
   await query(
     'UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE id = $1',
@@ -106,7 +106,7 @@ export const updateLastLogin = async (id) => {
   );
 };
 
-// Soft delete user
+
 export const deleteUser = async (id) => {
   const result = await query(
     'UPDATE users SET is_deleted = TRUE, updated_at = CURRENT_TIMESTAMP WHERE id = $1 RETURNING id',

@@ -35,7 +35,7 @@ import {
 import { apiGet } from '../services/api';
 
 const InstructorCourseManage = () => {
-  const { id } = useParams(); // course ID
+  const { id } = useParams(); 
   const navigate = useNavigate();
   const [course, setCourse] = useState(null);
   const [modules, setModules] = useState([]);
@@ -88,7 +88,7 @@ const InstructorCourseManage = () => {
       return;
     }
     
-    // If only one module, go directly to create lesson for that module
+  
     if (modules.length === 1) {
       navigate(`/courses/${id}/modules/${modules[0].id}/lessons/create`);
       return;
@@ -99,7 +99,7 @@ const InstructorCourseManage = () => {
   };
 
   const handleCreateQuiz = () => {
-    // Check if there are lessons to attach quiz to
+    
     const lessonsExist = modules.some(module => module.lessons && module.lessons.length > 0);
     
     if (!lessonsExist) {
@@ -107,14 +107,14 @@ const InstructorCourseManage = () => {
       return;
     }
     
-    // For now, navigate to first lesson with a quiz creation route
+   
     const firstModuleWithLessons = modules.find(module => module.lessons && module.lessons.length > 0);
     const firstLesson = firstModuleWithLessons.lessons[0];
     navigate(`/courses/${id}/lessons/${firstLesson.id}/quizzes/create`);
   };
 
   const handleCreateAssignment = () => {
-    // Check if there are lessons to attach assignment to
+  
     const lessonsExist = modules.some(module => module.lessons && module.lessons.length > 0);
     
     if (!lessonsExist) {
@@ -122,7 +122,7 @@ const InstructorCourseManage = () => {
       return;
     }
     
-    // For now, navigate to first lesson with assignment creation route
+    
     const firstModuleWithLessons = modules.find(module => module.lessons && module.lessons.length > 0);
     const firstLesson = firstModuleWithLessons.lessons[0];
     navigate(`/courses/${id}/lessons/${firstLesson.id}/assignments/create`);

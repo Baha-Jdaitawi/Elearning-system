@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // Initialize auth state from localStorage
+ 
   useEffect(() => {
     const initAuth = async () => {
       try {
@@ -25,20 +25,20 @@ export const AuthProvider = ({ children }) => {
         const storedUser = localStorage.getItem('lms_user');
 
         if (storedToken && storedUser) {
-          // Validate token with backend
+         
           const response = await validateToken();
           if (response.success) {
             setToken(storedToken);
             setUser(JSON.parse(storedUser));
             setIsAuthenticated(true);
           } else {
-            // Token is invalid, clear storage
+           
             localStorage.removeItem('lms_token');
             localStorage.removeItem('lms_user');
           }
         }
       } catch (error) {
-        // Token validation failed, clear storage
+       
         localStorage.removeItem('lms_token');
         localStorage.removeItem('lms_user');
         console.error('Auth initialization failed:', error);

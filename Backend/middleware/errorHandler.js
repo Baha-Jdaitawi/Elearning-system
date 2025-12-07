@@ -5,7 +5,7 @@ export const errorHandler = (err, req, res, next) => {
 
   // Log error for debugging
   if (process.env.NODE_ENV === 'development') {
-    console.error('🚨 Error Details:', {
+    console.error(' Error Details:', {
       message: err.message,
       stack: err.stack,
       url: req.originalUrl,
@@ -14,7 +14,7 @@ export const errorHandler = (err, req, res, next) => {
       timestamp: new Date().toISOString()
     });
   } else {
-    console.error('🚨 Production Error:', {
+    console.error(' Production Error:', {
       message: err.message,
       url: req.originalUrl,
       method: req.method,
@@ -22,19 +22,19 @@ export const errorHandler = (err, req, res, next) => {
     });
   }
 
-  // Mongoose/PostgreSQL duplicate key error
+
   if (err.code === '23505') {
     const message = 'Duplicate field value entered';
     error = { message, statusCode: 400 };
   }
 
-  // Mongoose/PostgreSQL validation error
+  
   if (err.code === '23502') {
     const message = 'Required field is missing';
     error = { message, statusCode: 400 };
   }
 
-  // PostgreSQL foreign key constraint error
+  
   if (err.code === '23503') {
     const message = 'Referenced record does not exist';
     error = { message, statusCode: 400 };
@@ -68,7 +68,7 @@ export const errorHandler = (err, req, res, next) => {
   const statusCode = error.statusCode || err.statusCode || 500;
   const message = error.message || 'Internal Server Error';
 
-  // Send error response
+
   res.status(statusCode).json({
     success: false,
     error: message,
@@ -84,7 +84,7 @@ export const asyncHandler = (fn) => (req, res, next) => {
   Promise.resolve(fn(req, res, next)).catch(next);
 };
 
-// Custom error class
+
 export class AppError extends Error {
   constructor(message, statusCode) {
     super(message);

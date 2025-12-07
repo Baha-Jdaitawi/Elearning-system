@@ -216,10 +216,7 @@ export const submitQuizAnswersController = asyncHandler(async (req, res) => {
   const { answers } = req.body;
   const user = req.user;
 
-  // 🚨 REMOVED: Role check since enrollment is already verified in middleware
-  // Enrollment check is now handled by authorizeEnrolledStudentForLesson middleware
 
-  // Validate lesson exists
   const lessonWithCourse = await getLessonWithCourseInfo(parseInt(lesson_id));
   if (!lessonWithCourse) {
     throw new AppError('Lesson not found', HTTP_STATUS.NOT_FOUND);
@@ -284,13 +281,13 @@ export const bulkCreateQuizzesController = asyncHandler(async (req, res) => {
   const { quizzes } = req.body;
   const user = req.user;
 
-  // Validate lesson exists and check ownership
+
   const lessonWithCourse = await getLessonWithCourseInfo(parseInt(lesson_id));
   if (!lessonWithCourse) {
     throw new AppError('Lesson not found', HTTP_STATUS.NOT_FOUND);
   }
 
-  // Check if user owns the course or is admin
+
   if (user.role !== USER_ROLES.ADMIN && lessonWithCourse.instructor_id !== user.id) {
     throw new AppError('Access denied', HTTP_STATUS.FORBIDDEN);
   }

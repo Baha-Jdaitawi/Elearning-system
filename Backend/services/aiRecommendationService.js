@@ -1,7 +1,7 @@
-// services/aiRecommendationService.js - FIXED VERSION
+
 import { query } from '../database/connection.js';
 
-// Track user interactions for recommendation engine
+
 export const trackUserInteraction = async (userId, interactionData) => {
   const {
     courseId = null,
@@ -10,7 +10,7 @@ export const trackUserInteraction = async (userId, interactionData) => {
     metadata = {}
   } = interactionData;
 
-  // Assign interaction scores
+
   const interactionScores = {
     'view': 1,
     'search': 1,
@@ -31,7 +31,6 @@ export const trackUserInteraction = async (userId, interactionData) => {
   );
 };
 
-// Get user's learning profile for recommendations
 export const getUserLearningProfile = async (userId) => {
   const result = await query(`
     WITH user_stats AS (
@@ -79,7 +78,7 @@ export const getUserLearningProfile = async (userId) => {
   return result.rows[0] || null;
 };
 
-// 🔧 FIXED: Simple rule-based recommendations (corrected column names)
+
 export const generateSmartRecommendations = async (userId, limit = 5) => {
   const profile = await getUserLearningProfile(userId);
   
@@ -156,7 +155,7 @@ export const generateSmartRecommendations = async (userId, limit = 5) => {
   return recommendations.rows;
 };
 
-// 🔧 FIXED: Fallback recommendations when no user-specific data exists
+
 export const getFallbackRecommendations = async (userId, limit = 5) => {
   const recommendations = await query(`
     SELECT DISTINCT
@@ -182,13 +181,13 @@ export const getFallbackRecommendations = async (userId, limit = 5) => {
   return recommendations.rows;
 };
 
-// 🔧 ENHANCED: Smart recommendations with fallback
+
 export const getSmartRecommendationsWithFallback = async (userId, limit = 5) => {
   try {
-    // Try to get personalized recommendations first
+   
     let recommendations = await generateSmartRecommendations(userId, limit);
     
-    // If no personalized recommendations, get popular courses
+  
     if (recommendations.length === 0) {
       recommendations = await getFallbackRecommendations(userId, limit);
     }
@@ -227,11 +226,11 @@ export const cacheRecommendations = async (userId, recommendations) => {
     }
   } catch (error) {
     console.error('Error caching recommendations:', error);
-    // Don't throw error, just log it
+  
   }
 };
 
-// Get cached recommendations
+
 export const getCachedRecommendations = async (userId) => {
   try {
     const result = await query(`

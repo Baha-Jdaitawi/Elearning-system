@@ -70,7 +70,7 @@ const CreateLesson = () => {
         setModules(modulesResponse.data.modules || []);
       }
 
-      // If moduleId is provided, fetch specific module and set position
+     
       if (moduleId) {
         const moduleResponse = await apiGet(`/modules/${moduleId}`);
         if (moduleResponse.success) {
@@ -105,7 +105,7 @@ const CreateLesson = () => {
     const minutes = parseInt(e.target.value) || 0;
     setFormData(prev => ({
       ...prev,
-      duration: minutes * 60 // Convert to seconds
+      duration: minutes * 60 
     }));
   };
 

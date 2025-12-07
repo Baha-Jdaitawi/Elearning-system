@@ -1,4 +1,4 @@
-// pages/UserPreferences.jsx
+
 import { useState, useEffect } from 'react';
 import {
   Container,

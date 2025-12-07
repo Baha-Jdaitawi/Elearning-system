@@ -13,9 +13,9 @@ import {
   toggleLessonPublishStatusController,
   getCourseLessonsNavigationController,
   searchLessonsInCourseController,
-  markLessonCompleteController,        // 🆕 ADDED - Mark lesson complete
-  getLessonProgressController,         // 🆕 ADDED - Get lesson progress
-  getUserLessonProgressController      // 🆕 ADDED - Get user's progress for lesson
+  markLessonCompleteController,        
+  getLessonProgressController,         
+  getUserLessonProgressController      
 } from '../controllers/lessonController.js';
 
 import { authenticate, authorize } from '../middleware/auth.js';
@@ -31,14 +31,14 @@ import { USER_ROLES } from '../utils/constants.js';
 
 const router = express.Router();
 
-// 🔒 All routes require authentication
+
 router.use(authenticate);
 
-// 📚 Course navigation & search (public for enrolled students)
+
 router.get('/course/:course_id/navigation', validateId, getCourseLessonsNavigationController);
 router.get('/course/:course_id/search', validateSearch, searchLessonsInCourseController);
 
-// 📊 Module lessons (public for enrolled students)
+
 router.get(
   '/module/:module_id',
   [
@@ -50,7 +50,7 @@ router.get(
   getLessonsByModuleController
 );
 
-// 🎯 LESSON COMPLETION ROUTES (NEW) - These fix your 404 error!
+
 router.post(
   '/:id/complete',
   validateId,
@@ -64,14 +64,14 @@ router.post(
   markLessonCompleteController
 );
 
-// 📈 Get lesson progress for current user
+
 router.get(
   '/:id/progress',
   validateId,
   getUserLessonProgressController
 );
 
-// 📊 Get all progress for lesson (instructor/admin only)
+
 router.get(
   '/:id/progress/all',
   validateId,
@@ -79,7 +79,7 @@ router.get(
   getLessonProgressController
 );
 
-// ➕ Create lesson (instructor/admin only)
+
 router.post(
   '/',
   authorize(USER_ROLES.INSTRUCTOR, USER_ROLES.ADMIN),
@@ -87,13 +87,13 @@ router.post(
   createLessonController
 );
 
-// 🔍 Get lesson by ID (public for enrolled students)
+
 router.get('/:id', validateId, getLessonByIdController);
 
-// 🔄 Get adjacent lessons (public for enrolled students)
+
 router.get('/:id/adjacent', validateId, getAdjacentLessonsController);
 
-// ✏️ Update lesson (instructor/admin only)
+
 router.put(
   '/:id',
   validateId,
@@ -130,7 +130,7 @@ router.put(
   updateLessonController
 );
 
-// 🗑️ Delete lesson (instructor/admin only)
+
 router.delete(
   '/:id', 
   validateId, 
@@ -138,7 +138,7 @@ router.delete(
   deleteLessonController
 );
 
-// 🚀 Toggle publish status (instructor/admin only)
+
 router.put(
   '/:id/toggle-publish', 
   validateId, 
@@ -146,7 +146,7 @@ router.put(
   toggleLessonPublishStatusController
 );
 
-// 📄 Duplicate lesson (instructor/admin only)
+
 router.post(
   '/:id/duplicate',
   validateId,
@@ -160,7 +160,7 @@ router.post(
   duplicateLessonController
 );
 
-// 📊 Lesson statistics (instructor/admin only)
+
 router.get(
   '/:id/stats', 
   validateId, 

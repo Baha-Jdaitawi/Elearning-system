@@ -5,10 +5,7 @@ import { getEnrollmentByUserAndCourse } from '../models/enrollmentModel.js';
 import { createCertificate, updateCertificateFilePath, certificateExists } from '../models/certificateModel.js';
 import { format } from 'date-fns';
 
-/**
- * Generates a certificate PDF and saves it to /uploads/certificates/
- * Also creates a database record for the certificate
- */
+
 export const generateCertificate = async (userId, courseId) => {
   try {
     // Check if certificate already exists
@@ -29,10 +26,10 @@ export const generateCertificate = async (userId, courseId) => {
     const fileName = `${certificateId}.pdf`;
     const filePath = path.join('uploads', 'certificates', fileName);
 
-    // Ensure directory exists
+   
     fs.mkdirSync(path.dirname(filePath), { recursive: true });
 
-    // Create PDF with enhanced design
+   
     const doc = new PDFDocument({
       size: 'A4',
       layout: 'landscape',
@@ -163,7 +160,7 @@ export const generateCertificate = async (userId, courseId) => {
             finalGrade: enrollment.final_grade || null
           });
           
-          console.log(`✅ Certificate generated successfully for user ${userId}, course ${courseId}`);
+          console.log(`Certificate generated successfully for user ${userId}, course ${courseId}`);
           
           resolve({ 
             certificate,
