@@ -4,15 +4,7 @@ LearnHub is a full-stack **Learning Management System (LMS)** built with **Node.
 
 ---
 
-## **Table of Contents**
-1. [Features](#features)
-2. [Tech Stack](#tech-stack)
-3. [Project Structure](#project-structure)
-4. [Installation](#installation)
-5. [Environment Variables](#environment-variables)
-6. [Key Functionalities](#key-functionalities)
-7. [Database Design](#database-design)
-8. [Screenshots](#screenshots)
+
 
 ---
 
